@@ -35,10 +35,10 @@ const mockAlerts: FraudAlertItem[] = [
 ];
 
 const severityConfig = {
-  low: { bg: 'bg-blue-500/10', border: 'border-blue-400/30', icon: '⚪' },
-  medium: { bg: 'bg-yellow-500/10', border: 'border-yellow-400/30', icon: '🟡' },
-  high: { bg: 'bg-orange-500/10', border: 'border-orange-400/30', icon: '🔶' },
-  critical: { bg: 'bg-red-500/10', border: 'border-red-400/30', icon: '🔴' },
+  low: { bg: 'bg-blue-500/5', border: 'border-blue-100', color: 'text-blue-800', icon: '🔵' },
+  medium: { bg: 'bg-amber-500/5', border: 'border-amber-100', color: 'text-amber-700', icon: '🟡' },
+  high: { bg: 'bg-orange-500/5', border: 'border-orange-200/50', color: 'text-orange-800', icon: '🔶' },
+  critical: { bg: 'bg-rose-500/5', border: 'border-rose-100', color: 'text-rose-800', icon: '🔴' },
 };
 
 export function FraudDetectionPanel() {
@@ -46,14 +46,16 @@ export function FraudDetectionPanel() {
   const totalRisk = mockAlerts.length > 0 ? 'MEDIUM' : 'LOW';
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 font-sans text-foreground">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">🔍 Fraud Detection</h2>
+        <h2 className="text-xl sm:text-2xl font-black font-heading flex items-center gap-2">
+          <span>🔍</span> Fraud Detection
+        </h2>
         <div
-          className={`px-3 py-1 rounded-full text-sm font-semibold ${
+          className={`px-3.5 py-1 rounded-full text-xs font-black border ${
             totalRisk === 'MEDIUM'
-              ? 'bg-orange-500/20 text-orange-300'
-              : 'bg-green-500/20 text-green-300'
+              ? 'bg-orange-500/10 border-orange-200/50 text-orange-800'
+              : 'bg-primary/10 border-primary/10 text-primary'
           }`}
         >
           Risk: {totalRisk}
@@ -61,17 +63,17 @@ export function FraudDetectionPanel() {
       </div>
 
       {/* AI Confidence */}
-      <div className="backdrop-blur-md bg-white/5 border border-blue-400/20 rounded-lg p-4">
-        <p className="text-blue-300 text-sm mb-2">AI Confidence Score</p>
-        <div className="w-full bg-gray-700 rounded-full h-3">
+      <div className="bg-primary/5 border border-primary/10 rounded-2xl p-4.5">
+        <p className="text-primary font-black text-xs sm:text-sm mb-2">AI Confidence Score</p>
+        <div className="w-full bg-bg-secondary rounded-full h-3 overflow-hidden border border-border-color">
           <motion.div
-            className="bg-linear-to-r from-purple-500 to-pink-500 h-3 rounded-full"
+            className="bg-primary h-3 rounded-full"
             initial={{ width: 0 }}
             animate={{ width: '87%' }}
             transition={{ duration: 1, delay: 0.5 }}
           />
         </div>
-        <p className="text-white font-bold mt-2">87%</p>
+        <p className="text-primary font-black text-sm mt-2">87%</p>
       </div>
 
       {/* Alerts */}
@@ -81,17 +83,17 @@ export function FraudDetectionPanel() {
           return (
             <motion.div
               key={alert.id}
-              className={`${config.bg} border ${config.border} rounded-lg p-4`}
+              className={`${config.bg} border ${config.border} rounded-2xl p-4 hover:shadow-premium transition-all duration-300`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.08 }}
             >
               <div className="flex items-start gap-3">
-                <span className="text-xl">{config.icon}</span>
+                <span className="text-lg mt-0.5">{config.icon}</span>
                 <div className="flex-1">
-                  <p className="font-semibold text-white">{alert.type}</p>
-                  <p className="text-sm text-gray-300">{alert.description}</p>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="font-bold text-foreground text-sm sm:text-base">{alert.type}</p>
+                  <p className="text-xs sm:text-sm text-body-text/90 mt-1 font-medium leading-relaxed">{alert.description}</p>
+                  <p className="text-[10px] text-light-text font-bold tracking-wide uppercase mt-2">
                     {Math.floor(
                       (Date.now() - alert.timestamp.getTime()) / (1000 * 60)
                     )}{' '}
@@ -99,7 +101,7 @@ export function FraudDetectionPanel() {
                   </p>
                 </div>
                 <motion.button
-                  className="px-3 py-1 bg-white/10 rounded text-sm font-semibold text-white hover:bg-white/20 transition-all"
+                  className="px-3 py-1.5 bg-primary/10 text-primary hover:bg-primary/15 border border-primary/5 rounded-lg text-xs font-bold cursor-pointer transition-all"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -112,12 +114,14 @@ export function FraudDetectionPanel() {
       </div>
 
       {/* Recommendations */}
-      <div className="backdrop-blur-md bg-linear-to-r from-purple-500/10 to-pink-500/10 border border-purple-400/20 rounded-lg p-4">
-        <h3 className="font-semibold text-white mb-3">📋 Recommendations</h3>
-        <ul className="space-y-2 text-sm text-gray-300">
-          <li>✓ Review staff member transactions (ID: staff-id-5)</li>
-          <li>✓ Verify coupon usage with customer</li>
-          <li>✓ Enable transaction verification alerts</li>
+      <div className="bg-accent/5 border border-accent/15 rounded-2xl p-4.5">
+        <h3 className="font-black text-sm text-accent-hover mb-3 flex items-center gap-1.5">
+          <span>📋</span> Recommendations
+        </h3>
+        <ul className="space-y-2 text-xs sm:text-sm font-semibold text-body-text">
+          <li className="flex items-center gap-1.5 text-emerald-800">✓ Review staff member transactions (ID: staff-id-5)</li>
+          <li className="flex items-center gap-1.5 text-emerald-800">✓ Verify coupon usage with customer</li>
+          <li className="flex items-center gap-1.5 text-emerald-800">✓ Enable transaction verification alerts</li>
         </ul>
       </div>
     </div>

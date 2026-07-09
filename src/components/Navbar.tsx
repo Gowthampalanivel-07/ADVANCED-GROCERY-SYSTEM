@@ -13,25 +13,40 @@ export function Navbar() {
   const links = [
     { href: '/', label: 'Home' },
     { href: '/dashboard', label: 'Dashboard' },
-    { href: '/admin', label: 'Admin' },
-    { href: '/analytics', label: 'Analytics' },
   ];
 
   const isActive = (href: string) => pathname === href;
+  const isManagementRoute =
+    pathname === '/dashboard' || pathname === '/admin' || pathname === '/analytics';
+
+  if (
+    pathname === '/' ||
+    pathname === '/dashboard' ||
+    pathname === '/admin' ||
+    pathname === '/analytics'
+  ) {
+    return null;
+  }
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-green-200/30 shadow-sm">
+    <nav className="sticky top-0 z-50 glass border-b border-primary/8 shadow-glow-green transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-1.5 group">
             <motion.div
-              className="text-2xl font-bold text-green-700 group-hover:text-green-600 transition-colors"
+              className="text-primary flex items-center justify-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
-              🧠 AGS
+              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17,8C8,8,4,16,4,16s4-2,9-5c-5,3-8,9-8,9S12,16,17,8z M12,2C12,2,3,6,3,12s9,10,9,10s9-4,9-10S12,2,12,2z" />
+              </svg>
             </motion.div>
+            <div className="flex flex-col justify-start">
+              <span className="text-lg font-black tracking-tight text-primary leading-none font-heading">Rootz</span>
+              <span className="text-[7px] font-semibold tracking-[0.25em] text-accent leading-none uppercase">ORGANICS</span>
+            </div>
           </Link>
 
           {/* Desktop Links */}
@@ -39,22 +54,22 @@ export function Navbar() {
             {links.map((link) => (
               <Link key={link.href} href={link.href}>
                 <motion.div
-                  className={`relative font-medium transition-colors ${
-                    isActive(link.href)
-                      ? 'text-green-700'
-                      : 'text-green-600 hover:text-green-700'
+                  className={`relative font-semibold text-sm transition-colors py-1 cursor-pointer font-sans magnetic-btn ${
+                    isActive(link.href) || (link.href === '/dashboard' && isManagementRoute)
+                      ? 'text-primary'
+                      : 'text-body-text hover:text-primary'
                   }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
                 >
                   {link.label}
-                  {isActive(link.href) && (
+                  {isActive(link.href) || (link.href === '/dashboard' && isManagementRoute) ? (
                     <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-green-600"
+                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary"
                       layoutId="navbar"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
-                  )}
+                  ) : null}
                 </motion.div>
               </Link>
             ))}
@@ -62,7 +77,7 @@ export function Navbar() {
 
           {/* Mobile Menu Button */}
           <motion.button
-            className="md:hidden p-2 text-green-700 hover:bg-green-50 rounded-lg transition-colors"
+            className="md:hidden p-2 text-primary hover:bg-primary/5 rounded-xl transition-colors"
             onClick={() => setIsOpen(!isOpen)}
             whileTap={{ scale: 0.95 }}
           >
@@ -94,7 +109,7 @@ export function Navbar() {
         {/* Mobile Menu */}
         {isOpen && (
           <motion.div
-            className="md:hidden pb-4 space-y-2"
+            className="md:hidden pb-4 space-y-2 border-t border-border-color pt-2"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -103,10 +118,10 @@ export function Navbar() {
               <Link key={link.href} href={link.href}>
                 <motion.div
                   onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`block px-4 py-2.5 rounded-xl font-semibold text-sm transition-all ${
                     isActive(link.href)
-                      ? 'bg-green-100 text-green-700'
-                      : 'text-green-600 hover:bg-green-50'
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-body-text hover:bg-primary/5'
                   }`}
                   whileHover={{ x: 4 }}
                   whileTap={{ scale: 0.98 }}

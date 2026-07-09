@@ -69,71 +69,75 @@ export function DynamicPricingPanel() {
   };
 
   if (loading) {
-    return <div className="p-4 text-center text-green-600 font-semibold animate-pulse">Loading pricing data...</div>;
+    return <div className="p-4 text-center text-primary font-bold animate-pulse font-sans">Loading pricing data...</div>;
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-green-900 mb-6">💰 Dynamic Pricing Engine</h2>
+    <div className="space-y-4 font-sans">
+      <h2 className="text-xl sm:text-2xl font-black text-foreground mb-6 font-heading flex items-center gap-2">
+        <span>💰</span> Dynamic Pricing Engine
+      </h2>
 
       <div className="grid gap-4">
         {prices.map((price, i) => (
           <motion.div
             key={price.productId}
-            className={`bg-gradient-to-br ${selectedProduct === price.productId ? 'from-green-50 to-emerald-50' : 'from-white to-green-50/50'} border-2 ${selectedProduct === price.productId ? 'border-green-400' : 'border-green-200'} rounded-lg p-6 hover:border-green-400 transition-all cursor-pointer`}
+            className={`bg-surface border-2 rounded-[24px] p-5.5 hover:shadow-premium hover:border-primary/25 transition-all duration-300 cursor-pointer ${
+              selectedProduct === price.productId ? 'border-primary' : 'border-border-color'
+            }`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
+            transition={{ delay: i * 0.08 }}
             onClick={() => setSelectedProduct(price.productId)}
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.01 }}
           >
             <div className="flex items-start justify-between mb-4 flex-wrap gap-2">
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-green-900">
+                <h3 className="text-lg font-black text-foreground tracking-tight">
                   {price.productName}
                 </h3>
-                <p className="text-sm text-green-600 font-medium">{price.reason}</p>
+                <p className="text-xs sm:text-sm text-body-text/80 font-bold mt-1">{price.reason}</p>
               </div>
               <motion.div
-                className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap ${
+                className={`px-3 py-1.5 rounded-full text-xs font-black whitespace-nowrap ${
                   price.discount > 0
-                    ? 'bg-emerald-100 text-emerald-700'
+                    ? 'bg-emerald-500/10 text-emerald-700'
                     : price.discount < 0
-                    ? 'bg-red-100 text-red-700'
-                    : 'bg-blue-100 text-blue-700'
+                    ? 'bg-rose-500/10 text-rose-700'
+                    : 'bg-primary/10 text-primary'
                 }`}
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.05 }}
               >
-                {price.discount > 0 ? '-' : '+'}
+                {price.discount > 0 ? '-' : price.discount < 0 ? '+' : ''}
                 {Math.abs(price.discount).toFixed(1)}%
               </motion.div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-              <div className="bg-white p-3 rounded-lg border border-green-200">
-                <p className="text-green-600 text-xs font-semibold">Base Price</p>
-                <p className="text-lg font-bold text-green-900">₹{price.basePrice}</p>
+              <div className="bg-bg-secondary p-3 rounded-[18px] border border-border-color">
+                <p className="text-light-text text-[10px] font-bold uppercase tracking-wider">Base Price</p>
+                <p className="text-base font-black text-foreground mt-1">₹{price.basePrice}</p>
               </div>
-              <div className="bg-white p-3 rounded-lg border border-green-200">
-                <p className="text-green-600 text-xs font-semibold">Current Price</p>
-                <p className="text-lg font-bold text-green-900">₹{price.currentPrice}</p>
+              <div className="bg-bg-secondary p-3 rounded-[18px] border border-border-color">
+                <p className="text-light-text text-[10px] font-bold uppercase tracking-wider">Current Price</p>
+                <p className="text-base font-black text-foreground mt-1">₹{price.currentPrice}</p>
               </div>
-              <div className="bg-white p-3 rounded-lg border border-green-200">
-                <p className="text-green-600 text-xs font-semibold">Demand Level</p>
-                <p className="text-lg font-bold text-green-900">{(price.demandLevel * 100).toFixed(0)}%</p>
+              <div className="bg-bg-secondary p-3 rounded-[18px] border border-border-color">
+                <p className="text-light-text text-[10px] font-bold uppercase tracking-wider">Demand Level</p>
+                <p className="text-base font-black text-foreground mt-1">{(price.demandLevel * 100).toFixed(0)}%</p>
               </div>
-              <div className="bg-white p-3 rounded-lg border border-green-200">
-                <p className="text-green-600 text-xs font-semibold">Expiry</p>
-                <p className="text-lg font-bold text-green-900">{price.expiryDays}d</p>
+              <div className="bg-bg-secondary p-3 rounded-[18px] border border-border-color">
+                <p className="text-light-text text-[10px] font-bold uppercase tracking-wider">Expiry</p>
+                <p className="text-base font-black text-foreground mt-1">{price.expiryDays}d</p>
               </div>
             </div>
 
             {/* Demand Bar */}
             <div className="mb-4">
-              <p className="text-xs text-green-600 font-semibold mb-2">Demand Level</p>
-              <div className="w-full bg-green-200 rounded-full h-2">
+              <p className="text-xs text-body-text/80 font-bold mb-2">Demand Level</p>
+              <div className="w-full bg-bg-secondary rounded-full h-2 overflow-hidden border border-border-color">
                 <motion.div
-                  className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full"
+                  className="bg-primary h-2 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${price.demandLevel * 100}%` }}
                   transition={{ duration: 0.8, delay: i * 0.1 + 0.3 }}
@@ -148,20 +152,20 @@ export function DynamicPricingPanel() {
                   e.stopPropagation();
                   handleApplyPrice(price.productId);
                 }}
-                className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-all text-white ${
+                className={`flex-1 px-4 py-2.5 rounded-[14px] font-bold text-xs sm:text-sm tracking-wide transition-all text-white cursor-pointer ${
                   appliedPrices.has(price.productId)
-                    ? 'bg-emerald-500 shadow-lg'
-                    : 'bg-green-500 hover:bg-green-600'
+                    ? 'bg-emerald-500 hover:bg-emerald-600 shadow-sm'
+                    : 'bg-primary hover:bg-primary/95 shadow-sm'
                 }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 {appliedPrices.has(price.productId) ? '✓ Applied' : 'Apply Price'}
               </motion.button>
               <motion.button
-                className="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="px-4 py-2.5 bg-primary/10 text-primary border border-primary/5 rounded-[14px] font-bold text-xs sm:text-sm tracking-wide hover:bg-primary/15 transition-all cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 Edit
               </motion.button>
@@ -172,13 +176,14 @@ export function DynamicPricingPanel() {
 
       {/* Summary */}
       <motion.div
-        className="p-4 bg-gradient-to-r from-green-100 to-emerald-100 border-2 border-green-300 rounded-lg mt-6"
+        className="p-4 bg-primary/5 border border-primary/10 rounded-[20px] mt-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.3 }}
       >
-        <p className="text-green-900 font-semibold">
-          💡 {appliedPrices.size > 0 ? `${appliedPrices.size} prices applied successfully!` : 'Smart pricing recommendations based on demand and inventory levels'}
+        <p className="text-primary font-bold text-xs sm:text-sm flex items-center gap-2">
+          <span>💡</span>
+          {appliedPrices.size > 0 ? `${appliedPrices.size} prices applied successfully!` : 'Smart pricing recommendations based on demand and inventory levels'}
         </p>
       </motion.div>
     </div>
